@@ -5,13 +5,24 @@ import { VRFConsumerBase } from "@chainlink/contracts/src/v0.6/VRFConsumerBase.s
 
 import "@nomiclabs/buidler/console.sol";
 
-contract CLIOManager is VRFConsumerBase {
+contract CLIOVRFManager is VRFConsumerBase {
 
     bytes32 internal keyHash;
     uint256 internal fee;
 
     uint256 public randomResult;
     uint256 public usrlinkBalance;
+
+    // event eventReceivedRandomNumber(
+    //     bytes32 requestId,
+    //     uint256 randomness,
+    //     uint256 linkbalance
+    // );
+
+    event eventReceivedRandomNumber(
+        bytes32 requestId,
+        uint256 randomness
+    );
 
     /**
      * Constructor inherits VRFConsumerBase
@@ -47,12 +58,10 @@ contract CLIOManager is VRFConsumerBase {
     function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
 
         randomResult = randomness;
+        // emit eventReceivedRandomNumber( requestId, randomness, LINK.balanceOf(address(this)));
+        emit eventReceivedRandomNumber( requestId, randomness);
         console.log("nodeid: %s,", randomness);
 
-    }
-
-    function getUserLinkBalance() public view returns (uint256) {
-        return usrlinkBalance;
     }
 
 }
